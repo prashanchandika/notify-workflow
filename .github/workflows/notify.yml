@@ -1,0 +1,54 @@
+name: Notify Workflow
+on:
+  workflow_call:
+    inputs:
+      needs:
+        required: true
+        type: string
+    secrets:
+      GH_TOKEN:
+        required: true  # If you need authentication for notifications
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    needs: ${{ fromJson(inputs.needs) }}
+    if: always()
+    steps:
+      - name: Convert Needs to JSON
+        run: |
+          echo '${{ toJSON(needs) }}' > needs.json
+          cat needs.json  # Debugging output
+
+      - name: Determine Failed Jobs
+        run: |
+          FAILED_JOBS=""
+          for job in $(jq -r 'keys[]' needs.json); do
+            RESULT=$(jq -r ".\"$job\".result" needs.json)
+            if [[ "$RESULT" == "failure" ]]; then
+              FAILED_JOBS+="❌ $job failed\n"
+            fi
+          done
+
+          if [[ -z "$FAILED_JOBS" ]]; then
+            echo "WORKFLOW_STATUS=✅ All jobs succeeded!" >> $GITHUB_ENV
+          else
+            echo -e "$FAILED_JOBS" > failed_jobs.txt
+            echo "WORKFLOW_STATUS=❌ Some jobs failed!" >> $GITHUB_ENV
+          fi
+
+      - name: Capture End Time & Calculate Deployment Time
+        run: |
+          END_TIME=$(date +%s)
+          START_TIME=$(cat start_time.txt || echo "0")
+          ELAPSED_TIME=$((END_TIME - START_TIME))
+          DEPLOY_TIME="$((ELAPSED_TIME / 60))m $((ELAPSED_TIME % 60))s"
+          
+          echo "DEPLOY_TIME=$DEPLOY_TIME" >> $GITHUB_ENV
+          echo "Deployment Time: $DEPLOY_TIME"
+
+      - name: Send Notification
+        run: |
+          echo "🚀 Workflow Status: ${{ env.WORKFLOW_STATUS }}"
+          cat failed_jobs.txt 2>/dev/null || echo "No failures"
+          echo "⏳ Deployment Time: ${{ env.DEPLOY_TIME }}"

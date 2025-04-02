@@ -16,14 +16,14 @@ jobs:
     steps:
       - name: Convert Jobs to JSON
         run: |
-          echo '${{ jobs }}' > jobs.json
-          cat jobs.json  # Debugging output
+          echo '${{ job_list }}' > jobs.json
+          cat job_list.json  # Debugging output
 
       - name: Determine Failed Jobs
         run: |
           FAILED_JOBS=""
-          for job in $(jq -r 'keys[]' jobs.json); do
-            RESULT=$(jq -r ".\"$job\".result" jobs.json)
+          for job in $(jq -r 'keys[]' job_list.json); do
+            RESULT=$(jq -r ".\"$job\".result" job_list.json)
             if [[ "$RESULT" == "failure" ]]; then
               FAILED_JOBS+="❌ $job failed\n"
             fi

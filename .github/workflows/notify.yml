@@ -14,16 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Convert Needs to JSON
+      - name: Convert Jobs to JSON
         run: |
-          echo '${{ needs }}' > needs.json
-          cat needs.json  # Debugging output
+          echo '${{ jobs }}' > jobs.json
+          cat jobs.json  # Debugging output
 
       - name: Determine Failed Jobs
         run: |
           FAILED_JOBS=""
-          for job in $(jq -r 'keys[]' needs.json); do
-            RESULT=$(jq -r ".\"$job\".result" needs.json)
+          for job in $(jq -r 'keys[]' jobs.json); do
+            RESULT=$(jq -r ".\"$job\".result" jobs.json)
             if [[ "$RESULT" == "failure" ]]; then
               FAILED_JOBS+="❌ $job failed\n"
             fi

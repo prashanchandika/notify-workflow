@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Convert Jobs to JSON
         run: |
-          echo '${{ job_list }}' > jobs.json
+          echo '${{ inputs.job_list }}' > jobs.json
           cat job_list.json  # Debugging output
 
       - name: Determine Failed Jobs

@@ -56,4 +56,5 @@ jobs:
           cat failed_jobs.txt 2>/dev/null || echo "No failures"
           echo "⏳ Deployment Time: ${{ env.DEPLOY_TIME }}"
           echo "Test ENV value: $env1"
+          echo "github actor: ${{ github.actor }}"
           curl ${{ secrets.TEST_ENV }}

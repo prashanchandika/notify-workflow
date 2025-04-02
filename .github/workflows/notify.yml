@@ -41,6 +41,7 @@ jobs:
 
       - name: Capture End Time & Calculate Deployment Time
         run: |
+          echo "start time is: ${{ inputs.start_time }}"
           END_TIME=$(date +%s)
           START_TIME=${{ inputs.start_time }}
           ELAPSED_TIME=$((END_TIME - START_TIME))

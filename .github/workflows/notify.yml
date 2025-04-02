@@ -57,5 +57,5 @@ jobs:
           echo "⏳ Deployment Time: ${{ env.DEPLOY_TIME }}"
           echo "Test ENV value: $env1"
           echo "github actor: ${{ github.actor }}"
-          echo "github.ref_name: ${{ github.ref_name }}
+          echo "github.ref_name: ${{ github.ref_name }}"
           curl ${{ secrets.TEST_ENV }}

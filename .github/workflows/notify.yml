@@ -5,6 +5,9 @@ on:
       job_list:
         required: true
         type: string
+      start_time:
+        required: true
+        type: string
     secrets:
       GH_TOKEN:
         required: true  # If you need authentication for notifications
@@ -39,7 +42,7 @@ jobs:
       - name: Capture End Time & Calculate Deployment Time
         run: |
           END_TIME=$(date +%s)
-          START_TIME=$(cat start_time.txt || echo "0")
+          START_TIME=${{ inputs.start_time }}
           ELAPSED_TIME=$((END_TIME - START_TIME))
           DEPLOY_TIME="$((ELAPSED_TIME / 60))m $((ELAPSED_TIME % 60))s"
           

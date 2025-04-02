@@ -2,7 +2,7 @@ name: Notify Workflow
 on:
   workflow_call:
     inputs:
-      jobs_list:
+      job_list:
         required: true
         type: string
     secrets:

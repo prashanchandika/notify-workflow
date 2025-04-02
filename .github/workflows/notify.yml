@@ -10,7 +10,7 @@ on:
         type: string
     secrets:
       GH_TOKEN:
-        required: true  # If you need authentication for notifications
+        required: false  # If you need authentication for notifications
 
 jobs:
   notify:

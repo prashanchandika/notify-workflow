@@ -56,4 +56,4 @@ jobs:
           echo "🚀 Workflow Status: ${{ env.WORKFLOW_STATUS }}"
           cat failed_jobs.txt 2>/dev/null || echo "No failures"
           echo "⏳ Deployment Time: ${{ env.DEPLOY_TIME }}"
-          echo "Test ENV value: ${{ secrets.TEST_ENV }}"
+          echo "Test ENV value: ${{ env.TEST_ENV }}"
